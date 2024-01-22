@@ -1,0 +1,34 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Event {
+  id      Int      @id @default(autoincrement())
+  name    String
+  weight  Int
+  origin_endpoint String
+  origin_verb   String
+
+  userEvent UserEvent[]
+}
+
+model UserEvent {
+  id      Int      @id @default(autoincrement())
+  event_id  Int
+  user_id   Int
+  weight    Int
+
+  user   User @relation(fields: [user_id], references: [id])
+  event   Event @relation(fields: [event_id], references: [id])
+}
+
+model User {
+  id      Int      @id @default(autoincrement())
+  karma_score   Int
+  userEvent UserEvent[]
+}
