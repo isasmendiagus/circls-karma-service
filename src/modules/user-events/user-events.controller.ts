@@ -1,4 +1,4 @@
-import { addUserEvent } from './user-events.service';
+import { userEventsServiceCreate } from './user-events.service';
 import { UserEvent } from './user-events.schema';
 import { ConsumeMessage } from 'amqplib';
 
@@ -8,5 +8,5 @@ import { ConsumeMessage } from 'amqplib';
  */
 export async function createUserEvent(message: ConsumeMessage) {
   const userEvent = JSON.parse(message.content.toString()) as UserEvent;
-  return await addUserEvent(userEvent);
+  return await userEventsServiceCreate(userEvent);
 }

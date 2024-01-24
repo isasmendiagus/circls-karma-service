@@ -1,22 +1,20 @@
-import { getByOrigin } from '../events/events.repository';
-import { create } from './user-events.repository';
+import { userEventsRepositoryCreate } from './user-events.repository';
 import config from '../../config/index';
 import { UserEvent } from './user-events.schema';
 import { prismaClient } from '../../orm';
+import { eventRepositoryGetByOrigin } from '../events/events.repository';
 
-export async function addUserEvent(userEvent: UserEvent) {
+export async function userEventsServiceCreate(userEvent: UserEvent) {
   //Get id of the event in the catalog.
-  const event = await getByOrigin({
+  const event = await eventRepositoryGetByOrigin({
     origin_verb: userEvent.origin_verb,
     origin_endpoint: userEvent.origin_endpoint,
-    weight: 0,
-    name: '',
   });
 
   //If event does not exist throw an error
   if (!event) throw new Error('Event not found');
 
-  await create({
+  await userEventsRepositoryCreate({
     event: { connect: { id: event.id } },
     weight: event.weight,
     user: {
@@ -27,6 +25,7 @@ export async function addUserEvent(userEvent: UserEvent) {
     },
   });
 
+  //TODO: Create a user module to handle this query
   await prismaClient.user.update({
     where: { id: userEvent.user_id },
     data: { karma_score: { increment: event.weight } },

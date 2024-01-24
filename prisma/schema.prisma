@@ -7,6 +7,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+//TODO: Create index since each event looks for the event based on the origin_endpoint and origin_verb
 model Event {
   id      String  @id @default(uuid())
   name    String

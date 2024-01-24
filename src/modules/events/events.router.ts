@@ -1,6 +1,6 @@
 import express from 'express';
 import config from '../../config';
-import { get, post } from './events.controller';
+import { eventControllerCreate, eventControllerRead, eventControllerUpdate } from './events.controller';
 import { RoleMiddleware } from '../../middlewares/authorization.middleware';
 import { SchemaValidatorMiddleware } from '../../middlewares/schema_validator.middleware';
 import { eventSchema } from './events.schema';
@@ -13,7 +13,16 @@ import { eventSchema } from './events.schema';
  *   ensuring authenticated and authorized access and preventing bypassing of authentication.
  */
 const router = express.Router();
-router.get(config.apiPrefix + '/events', RoleMiddleware(['ADMIN']), get);
-router.post(config.apiPrefix + '/events', RoleMiddleware(['ADMIN']), SchemaValidatorMiddleware(eventSchema), post);
+
+router.get(config.apiPrefix + '/events', RoleMiddleware(['ADMIN']), eventControllerRead);
+
+router.post(
+  config.apiPrefix + '/events',
+  RoleMiddleware(['ADMIN']),
+  SchemaValidatorMiddleware(eventSchema),
+  eventControllerCreate,
+);
+
+router.patch(config.apiPrefix + '/events', RoleMiddleware(['ADMIN']), eventControllerUpdate);
 
 export default router;
