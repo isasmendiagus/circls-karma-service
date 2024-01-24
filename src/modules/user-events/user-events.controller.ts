@@ -1,0 +1,12 @@
+import { addUserEvent } from './user-events.service';
+import { UserEvent } from './user-events.schema';
+import { ConsumeMessage } from 'amqplib';
+
+/**
+ * This is a controller that receives messages from AMQP queue
+ * @param message
+ */
+export async function createUserEvent(message: ConsumeMessage) {
+  const userEvent = JSON.parse(message.content.toString()) as UserEvent;
+  return await addUserEvent(userEvent);
+}

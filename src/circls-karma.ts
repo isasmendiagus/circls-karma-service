@@ -1,3 +1,9 @@
-import { serveHTTP } from './server';
+import { connectDB, serveHTTP, subscribeAMQP } from './server';
 
-serveHTTP();
+async function main() {
+  await connectDB();
+  await serveHTTP();
+  await subscribeAMQP();
+}
+
+main();

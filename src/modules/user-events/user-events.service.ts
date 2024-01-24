@@ -1,11 +1,8 @@
 import { getByOrigin } from '../events/events.repository';
 import { create } from './user-events.repository';
 import config from '../../config/index';
-export interface UserEvent {
-  origin_endpoint: string;
-  origin_verb: string;
-  user_id: string; //uuid
-}
+import { UserEvent } from './user-events.schema';
+import { prismaClient } from '../../orm';
 
 export async function addUserEvent(userEvent: UserEvent) {
   //Get id of the event in the catalog.
@@ -22,6 +19,16 @@ export async function addUserEvent(userEvent: UserEvent) {
   await create({
     event: { connect: { id: event.id } },
     weight: event.weight,
-    user: { connectOrCreate: { where: { id: userEvent.user_id }, create: { karma_score: config.defaultKarmaScore } } },
+    user: {
+      connectOrCreate: {
+        where: { id: userEvent.user_id },
+        create: { id: userEvent.user_id, karma_score: config.defaultKarmaScore },
+      },
+    },
+  });
+
+  await prismaClient.user.update({
+    where: { id: userEvent.user_id },
+    data: { karma_score: { increment: event.weight } },
   });
 }

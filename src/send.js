@@ -11,8 +11,12 @@ amqp.connect('amqp://localhost', function (error0, connection) {
       throw error1;
     }
 
-    var queue = 'hello';
-    var msg = 'Hello World!';
+    var queue = 'circls';
+    var msg = JSON.stringify({
+      user_id: 'f0fd7773-83b8-4cb6-a81e-475d657ba249',
+      origin_verb: 'POST',
+      origin_endpoint: '/forum/comments',
+    });
 
     channel.assertQueue(queue, {
       durable: false,
