@@ -1,3 +1,3 @@
-import { serve } from './server';
+import { serveHTTP } from './server';
 
-serve();
+serveHTTP();

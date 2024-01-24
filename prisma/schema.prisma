@@ -8,7 +8,7 @@ datasource db {
 }
 
 model Event {
-  id      Int      @id @default(autoincrement())
+  id      String  @id @default(uuid())
   name    String
   weight  Int
   origin_endpoint String
@@ -18,9 +18,9 @@ model Event {
 }
 
 model UserEvent {
-  id      Int      @id @default(autoincrement())
-  event_id  Int
-  user_id   Int
+  id      String  @id @default(uuid())
+  event_id  String
+  user_id   String
   weight    Int
 
   user   User @relation(fields: [user_id], references: [id])
@@ -28,7 +28,7 @@ model UserEvent {
 }
 
 model User {
-  id      Int      @id @default(autoincrement())
+  id      String  @id @default(uuid())
   karma_score   Int
   userEvent UserEvent[]
 }

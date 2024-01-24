@@ -2,7 +2,7 @@ import config from '../config/index';
 import express from 'express';
 import eventsRouter from '../modules/events/events.router';
 
-export function serve() {
+export function serveHTTP() {
   const app = express();
 
   app.use(express.json());
