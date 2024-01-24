@@ -7,7 +7,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-//TODO: Create index since each event looks for the event based on the origin_endpoint and origin_verb
+//TODO: Create composite index since each new message on AMQP looks for the event based on the origin_endpoint and origin_verb
 model Event {
   id      String  @id @default(uuid())
   name    String
@@ -16,6 +16,7 @@ model Event {
   origin_verb   String
 
   userEvent UserEvent[]
+  @@unique([origin_endpoint, origin_verb], name: "UniqueOrigin")
 }
 
 model UserEvent {
@@ -23,6 +24,9 @@ model UserEvent {
   event_id  String
   user_id   String
   weight    Int
+  created_at              DateTime            @default(now())
+  updatedAt        DateTime           @updatedAt
+
 
   user   User @relation(fields: [user_id], references: [id])
   event   Event @relation(fields: [event_id], references: [id])

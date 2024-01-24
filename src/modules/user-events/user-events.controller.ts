@@ -7,6 +7,10 @@ import { ConsumeMessage } from 'amqplib';
  * @param message
  */
 export async function createUserEvent(message: ConsumeMessage) {
-  const userEvent = JSON.parse(message.content.toString()) as UserEvent;
-  return await userEventsServiceCreate(userEvent);
+  try {
+    const userEvent = JSON.parse(message.content.toString()) as UserEvent;
+    return await userEventsServiceCreate(userEvent);
+  } catch (e) {
+    console.error(e);
+  }
 }
