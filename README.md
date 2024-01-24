@@ -19,9 +19,10 @@ Password: guest
 To compile and run the service, use the following commands:
 
 ```npm
-npm run build && npm run start
+npm run build 
+npm run start
 ```
-
+**NOTE:** Before starting the service, make sure to copy the contents from the .env.example file to a new file named .env.
 
 ## Configuration
 Check the .env.example file to see the parameters that need to be configured.
@@ -50,8 +51,7 @@ export interface UserEvent {
 To simulate the emission of an event from another microservice, you can use the emit_event.js script. Here is an example of how to use this script:
 
 ```
-node ./src/emit_event.js --origin_endpoint /forum/comments --origin_verb POST --user_id 123e4567-e89b-12d3-a456-426614174000 --queue_name karma --amqp_url amqp://localhost
-
+node ./src/emit_event.js --origin_endpoint /forum/comment --origin_verb POST --user_id 123e4567-e89b-12d3-a456-426614174000 --queue_name karma --amqp_url amqp://localhost
 ```
 
 This command simulates the event of a user posting a comment on the forum, which is then sent to the specified AMQP queue.
